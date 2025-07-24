@@ -2,43 +2,47 @@ name: Deploy to Cloud Run
 
 on:
   push:
-    branches: [ main ]  # Change to 'master' or your default branch if different
+    branches: [main]
 
 jobs:
-  build-and-deploy:
+  build-test-deploy:
+    name: Build, Test, and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: ✅ Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 🔧 Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '17'
 
-      - name: 🐳 Set up Docker
-        uses: docker/setup-buildx-action@v3
+      - name: Run Unit Tests
+        run: ./mvnw test
 
-      - name: 🔐 Authenticate to Google Cloud
+      - name: Authenticate with GCP
         uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: 📦 Set up gcloud CLI
-        uses: google-github-actions/setup-gcloud@v2
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
 
-      - name: 🐳 Build & Push Docker image
-        run: |
-          gcloud auth configure-docker --quiet
-          docker build -t gcr.io/cloud-test-api-project/java-cloud-api .
-          docker push gcr.io/cloud-test-api-project/java-cloud-api
+      - name: Configure Docker to use gcloud CLI
+        run: gcloud auth configure-docker --quiet
 
-      - name: 🚀 Deploy to Cloud Run
-        run: |
-          gcloud run deploy java-cloud-api \
-            --image gcr.io/cloud-test-api-project/java-cloud-api \
-            --platform managed \
-            --region australia-southeast1 \
-            --allow-unauthenticated
+      - name: Build Docker image
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/java-cloud-api .
+
+      - name: Push Docker image
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/java-cloud-api
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: java-cloud-api
+          image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/java-cloud-api
+          region: australia-southeast1
+          allow-unauthenticated: true
