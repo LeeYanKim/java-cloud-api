@@ -9,6 +9,21 @@ jobs:
     name: Build, Test, and Deploy
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mydb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -20,9 +35,13 @@ jobs:
           java-version: '17'
 
       - name: Make Maven wrapper executable
-        run: chmod +x ./mvnw    
+        run: chmod +x ./mvnw
 
-      - name: Run Unit Tests
+      - name: Run Unit Tests with PostgreSQL
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/mydb
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
         run: ./mvnw test
 
       - name: Authenticate with GCP
