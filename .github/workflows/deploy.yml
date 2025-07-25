@@ -50,4 +50,4 @@ jobs:
           service: java-cloud-api
           image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/java-cloud-api
           region: australia-southeast1
-          allow-unauthenticated: true
+          flags: "--allow-unauthenticated"
