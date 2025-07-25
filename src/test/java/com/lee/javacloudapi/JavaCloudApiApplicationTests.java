@@ -24,4 +24,10 @@ class JavaCloudApiApplicationTests {
         ResponseEntity<String> response = restTemplate.getForEntity("/api/hello", String.class);
         assertThat(response.getBody()).isEqualTo("Hello from Java Cloud API!");
     }
+    @Test
+    void addEndpointShouldReturnResult() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/add", String.class);
+        assertThat(response.getBody()).isEqualTo("Result: 111");
+    }
+
 }
