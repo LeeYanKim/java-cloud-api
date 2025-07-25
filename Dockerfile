@@ -22,5 +22,5 @@ RUN cp target/*.jar app.jar
 # Expose default Spring Boot port
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Run the application (fixed path)
+ENTRYPOINT ["java", "-jar", "app.jar"]
