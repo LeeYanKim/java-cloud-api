@@ -8,6 +8,7 @@ jobs:
   build-test-deploy:
     name: Build, Test, and Deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 60  # default is 360 (6 hrs), but you can set it explicitly
 
     services:
       postgres:
