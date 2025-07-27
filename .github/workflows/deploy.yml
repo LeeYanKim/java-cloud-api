@@ -75,3 +75,5 @@ jobs:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
+
+
