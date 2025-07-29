@@ -35,9 +35,9 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-		<groupId>com.google.cloud.sql</groupId>
+			<groupId>com.google.cloud.sql</groupId>
 			<artifactId>postgres-socket-factory</artifactId>
-			<version>1.13.1</version>
+			<version>1.14.0</version>
 		</dependency>
 		<!-- PostgreSQL Driver -->
 		<dependency>

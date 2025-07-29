@@ -69,9 +69,11 @@ jobs:
           region: australia-southeast1
           flags: "--allow-unauthenticated --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }}"
         env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql:///mydb?cloudSqlInstance=${{ secrets.INSTANCE_CONNECTION_NAME }}&socketFactory=com.google.cloud.sql.postgres.SocketFactory&sslmode=disable
+          SPRING_DATASOURCE_URL: >-
+            jdbc:postgresql:///mydb?cloudSqlInstance=${{ secrets.INSTANCE_CONNECTION_NAME }}&socketFactory=com.google.cloud.sql.postgres.SocketFactory&sslmode=disable
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
 
 
 
