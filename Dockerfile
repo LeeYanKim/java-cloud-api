@@ -24,5 +24,3 @@ EXPOSE 8080
 
 # Run the application (fixed path)
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
-RUN JAR_FILE=$(find target -name "*.jar" | head -n 1) && cp "$JAR_FILE" app.jar
